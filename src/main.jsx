@@ -8,22 +8,25 @@ import RootLayout from './layouts/root';
 import CartPage from './routes/cart';
 import ProductsPage from './routes/products';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <RootLayout />,
-    children: [
-      {
-        path: '/products',
-        element: <ProductsPage />,
-      },
-      {
-        path: '/cart',
-        element: <CartPage />,
-      },
-    ],
-  },
-]);
+const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <RootLayout />,
+      children: [
+        {
+          path: '/products',
+          element: <ProductsPage />,
+        },
+        {
+          path: '/cart',
+          element: <CartPage />,
+        },
+      ],
+    },
+  ],
+  { basename: '/geektrust-teerex-store/' },
+);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
