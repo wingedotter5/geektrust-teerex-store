@@ -7,6 +7,7 @@ import './index.css';
 import RootLayout from './layouts/root';
 import CartPage from './routes/cart';
 import ProductsPage from './routes/products';
+import RootBoundary from './routes/root-boundary';
 
 const router = createBrowserRouter(
   [
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
           element: <CartPage />,
         },
       ],
+      errorElement: <RootBoundary />,
     },
   ],
   { basename: '/geektrust-teerex-store/' },
