@@ -10,7 +10,9 @@ export default function ProductCard({ product }) {
       </div>
       <hr />
       <div className="flex flex-col gap-1">
-        <p className="text-lg font-bold">{product.name}</p>
+        <p className="text-lg font-bold">
+          {product.name} ({product.gender})
+        </p>
         <small>Available: {product.quantity}</small>
         <div className="flex items-center justify-between">
           <div>Rs {product.price}</div>

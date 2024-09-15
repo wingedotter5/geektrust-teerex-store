@@ -1,10 +1,15 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Button from './button';
 
-export default function Search({ className, placeholder, onSearch }) {
-  const [query, setQuery] = useState('');
+export default function Search({
+  className,
+  placeholder,
+  onSearch,
+  initialValue = '',
+}) {
+  const [query, setQuery] = useState(initialValue);
 
   function onSubmit(event) {
     event.preventDefault();
@@ -14,6 +19,10 @@ export default function Search({ className, placeholder, onSearch }) {
   function onChange(event) {
     setQuery(event.target.value);
   }
+
+  useEffect(() => {
+    setQuery(initialValue);
+  }, [initialValue]);
 
   return (
     <form
@@ -36,4 +45,5 @@ Search.propTypes = {
   className: PropTypes.string,
   placeholder: PropTypes.string.isRequired,
   onSearch: PropTypes.func.isRequired,
+  initialValue: PropTypes.string,
 };

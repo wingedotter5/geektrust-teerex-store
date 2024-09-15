@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
 import {
   colorChange,
   genderChange,
+  initializeFilters,
   priceRangeChange,
   typeChange,
 } from '../redux/products-slice';
@@ -11,6 +14,7 @@ import Checkbox from './checkbox';
 
 export default function Filters({ className, products }) {
   const dispatch = useDispatch();
+  const [searchParams, setSearchParams] = useSearchParams();
   const filters = useSelector((state) => state.products.filters);
   const availableColors = Array.from(
     new Set(products.map((product) => product.color)),
@@ -40,6 +44,16 @@ export default function Filters({ className, products }) {
         checked: event.target.checked,
       }),
     );
+    setSearchParams((params) => {
+      let color = params.get('color')?.split(',') || [];
+      event.target.checked
+        ? color.push(event.target.name)
+        : (color = color.filter((_color) => _color !== event.target.name));
+      color.length
+        ? params.set('color', color.join(','))
+        : params.delete('color');
+      return params;
+    });
   }
 
   function genderChangeHandler(event) {
@@ -49,6 +63,16 @@ export default function Filters({ className, products }) {
         checked: event.target.checked,
       }),
     );
+    setSearchParams((params) => {
+      let gender = params.get('gender')?.split(',') || [];
+      event.target.checked
+        ? gender.push(event.target.name)
+        : (gender = gender.filter((_gender) => _gender !== event.target.name));
+      gender.length
+        ? params.set('gender', gender.join(','))
+        : params.delete('gender');
+      return params;
+    });
   }
 
   function priceRangeChangeHandler(event, value) {
@@ -58,6 +82,16 @@ export default function Filters({ className, products }) {
         checked: event.target.checked,
       }),
     );
+    setSearchParams((params) => {
+      let price = params.get('price')?.split(',') || [];
+      event.target.checked
+        ? price.push(value)
+        : (price = price.filter((_price) => _price !== value));
+      price.length
+        ? params.set('price', price.join(','))
+        : params.delete('price');
+      return params;
+    });
   }
 
   function typeChangeHandler(event) {
@@ -67,7 +101,27 @@ export default function Filters({ className, products }) {
         checked: event.target.checked,
       }),
     );
+    setSearchParams((params) => {
+      let type = params.get('type')?.split(',') || [];
+      event.target.checked
+        ? type.push(event.target.name)
+        : (type = type.filter((_type) => _type !== event.target.name));
+      type.length ? params.set('type', type.join(',')) : params.delete('type');
+      return params;
+    });
   }
+
+  useEffect(() => {
+    dispatch(
+      initializeFilters({
+        color: searchParams.get('color')?.split(',') || [],
+        gender: searchParams.get('gender')?.split(',') || [],
+        price: searchParams.get('price')?.split(',') || [],
+        type: searchParams.get('type')?.split(',') || [],
+        searchText: searchParams.get('query') || '',
+      }),
+    );
+  }, [dispatch, searchParams]);
 
   return (
     <div className={`flex min-w-64 flex-col gap-4 ${className ?? ''}`}>

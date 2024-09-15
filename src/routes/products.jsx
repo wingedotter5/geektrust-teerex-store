@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
 import Filters from '../components/filters';
 import ProductCard from '../components/product-card';
@@ -9,6 +10,7 @@ import { searchTextChange } from '../redux/products-slice';
 
 export default function ProductsPage() {
   const dispatch = useDispatch();
+  const [, setSearchParams] = useSearchParams();
   const filters = useSelector((state) => state.products.filters);
   const { data: products, error, isLoading } = useGetAllProductsQuery();
   const [isShowFiltersMobile, setIsShowFiltersMobile] = useState(false);
@@ -23,6 +25,10 @@ export default function ProductsPage() {
 
   function onSearch(query) {
     dispatch(searchTextChange(query));
+    setSearchParams((params) => {
+      params.set('query', query);
+      return params;
+    });
   }
 
   function showFiltersMobile() {
@@ -47,6 +53,7 @@ export default function ProductsPage() {
             className="flex-1"
             onSearch={onSearch}
             placeholder="Search for products"
+            initialValue={filters.searchText}
           />
           <button
             onClick={showFiltersMobile}

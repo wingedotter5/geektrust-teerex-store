@@ -53,6 +53,9 @@ const productsSlice = createSlice({
     searchTextChange(state, action) {
       state.filters.searchText = action.payload;
     },
+    initializeFilters(state, action) {
+      state.filters = action.payload;
+    },
   },
 });
 
@@ -62,5 +65,6 @@ export const {
   priceRangeChange,
   typeChange,
   searchTextChange,
+  initializeFilters,
 } = productsSlice.actions;
 export default productsSlice.reducer;
